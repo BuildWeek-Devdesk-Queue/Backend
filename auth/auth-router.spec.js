@@ -23,7 +23,7 @@ describe('auth router', () => {
                 cohort: 'WEB23'
             });
 
-            expect(res.status).toBe(200);
+            expect(res.status).toBe(201);
             expect(res.type).toMatch(/json/i);
         })
     })
@@ -38,7 +38,11 @@ describe('auth router', () => {
                     username: 'mark',
                     password: 'pass'
                 });
+
+                expect(res.status).toBe(200);
+                expect(res.type).toMatch(/json/i);
             })
+
         })
     });
     

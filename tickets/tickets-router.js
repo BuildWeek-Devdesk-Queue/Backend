@@ -351,11 +351,11 @@ router.post('/:id/pictures/open', async (req, res) => {
     try{
         for(let key in images){
             const file = images[key];
-            uploads.push(cloudinary.uploader.upload(file.tempFilePath, (err, result) => {}));
+            uploads.push(cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
+            }));
         }
         const results = await axios.all(uploads)
-
-        const urls = results.map(result => result.url);
+        const urls = results.map(result => result.secure_url);
         const inserts = [];
         
         for(url of urls){
@@ -384,7 +384,7 @@ router.post('/:id/pictures/resolved', async (req, res) => {
         }
         const results = await axios.all(uploads)
 
-        const urls = results.map(result => result.url);
+        const urls = results.map(result => result.secure_url);
         const inserts = [];
         
         for(url of urls){    
@@ -407,13 +407,12 @@ router.post('/:id/video/open', async (req, res) => {
     const {video} = req.files;
     try{
         await cloudinary.uploader.upload(video.tempFilePath, { resource_type: "video" }, async (err, result) => {
-           
-             
+        
                 await db('description_videos')
-                    .insert({ticket_id: id, url: result.url})
+                    .insert({ticket_id: id, url: result.secure_url})
             
           
-            res.status(200).json(result.url);
+            res.status(200).json(result.secure_url);
         });
     }catch(err){
         console.log(err);
@@ -427,11 +426,10 @@ router.post('/:id/video/resolved', async (req, res) => {
     const {video} = req.files;
     try{
         await cloudinary.uploader.upload(video.tempFilePath, { resource_type: "video" }, async (err, result) => {
-             
                 await db('solution_video')
-                    .insert({ticket_id: id, url: result.url})
+                    .insert({ticket_id: id, url: result.secure_url})
             
-            res.status(200).json(result.url);
+            res.status(200).json(result.secure_url);
         });
     }catch(err){
         console.log(err);
